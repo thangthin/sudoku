@@ -5,7 +5,7 @@ class Main():
     def __init__(self, parent):
         self.matrix = []
         self.size = 3
-        self.file = open("test/duplicate.txt")
+        self.file = open("test/problem1.txt")
 
     def main(self):
         for line in self.file:
@@ -15,6 +15,8 @@ class Main():
             print row
 
         Sudoku.check_matrix(self)
+
+
 
 if __name__ == '__main__':
     Main(object).main()
