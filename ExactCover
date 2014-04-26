@@ -10,6 +10,7 @@ class Node(object):
         self.column = None
 
 class Header(object):
+    def _init_(self):
         self.size = 0
         self.left = None
         self.right = None

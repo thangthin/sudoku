@@ -1,7 +1,8 @@
 __author__ = 'don'
 import itertools
+#provide chain functions (takes list of lists and concatenates
 
-
+#
 def list_repeats(subset):
     return list(set([x for x in subset if subset.count(x) > 1]))
 
