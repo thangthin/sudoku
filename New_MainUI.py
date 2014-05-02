@@ -25,11 +25,14 @@ class Sudoku_UI:
             cols = []
             for j in range(9):
                 if (i in self.grey_row) and (j in self.grey_col):
-                    e = Entry(self.myContainer2, width=4, relief=RIDGE, bg = "grey")
+                    e = Entry(self.myContainer2, width=4, relief=RIDGE,
+                              bg = "grey")
                 elif (i in self.center_box) and (j in self.center_box):
-                    e = Entry(self.myContainer2, width=4, relief=RIDGE, bg = "grey")
+                    e = Entry(self.myContainer2, width=4, relief=RIDGE,
+                              bg = "grey")
                 else:
-                    e = Entry(self.myContainer2, width=4, relief=RIDGE, bg = "white")
+                    e = Entry(self.myContainer2, width=4, relief=RIDGE,
+                              bg = "white")
                 e.grid(row=i, column = j, sticky = NSEW)
                 cols.append(e)
             self.rows.append(cols)
@@ -48,6 +51,7 @@ class Sudoku_UI:
 
         self.testButton = Button(self.myContainer3, text = "test",
                                  command=self.puzzle_print).pack(side=LEFT)
+
 ### Parse to convert it to required list type
     def submit(self):
         for row in self.rows:
@@ -72,9 +76,6 @@ class Sudoku_UI:
 
     def puzzle_print(self):
         print(puzzle_list)
-        print(len(puzzle_list))
-        print(len(puzzle_list[0]))
-        print(len(puzzle_string_list))
         print(puzzle_string_list)
 
 
