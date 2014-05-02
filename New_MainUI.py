@@ -2,9 +2,12 @@ __author__ = 'thang'
 
 from Tkinter import * # Import tkinter
 
+puzzle_list = []
+puzzle_string_list = []
+
 class Sudoku_UI:
-    puzzle_list = []
-    puzzle_string_list = []
+    #puzzle_list = []
+    #puzzle_string_list = []
 
     def __init__(self,parent):
         self.myParent = parent
@@ -45,23 +48,34 @@ class Sudoku_UI:
 
         self.testButton = Button(self.myContainer3, text = "test",
                                  command=self.puzzle_print).pack(side=LEFT)
-
+### Parse to convert it to required list type
     def submit(self):
         for row in self.rows:
             cols = []
             for col in row:
-                print col.get(),
                 cols.append(col.get())
-            self.puzzle_list.append(cols)
+            puzzle_list.append(cols)
+            i = 0
+            for e in cols:
+                if e == '':
+                    cols[i] = '0'
+                i += 1
+
+            puzzle_string_list.append(''.join(cols))
+
 
     def new_puzzle(self):
         print "new game code"
-    def quit_game(self,event):
+
+    def quit_game(self):
         self.myParent.destroy()
 
     def puzzle_print(self):
-        print(self.puzzle_list)
-        print(len(self.puzzle_list))
+        print(puzzle_list)
+        print(len(puzzle_list))
+        print(len(puzzle_list[0]))
+        print(len(puzzle_string_list))
+        print(puzzle_string_list)
 
 
 
