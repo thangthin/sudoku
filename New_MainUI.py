@@ -1,12 +1,82 @@
 __author__ = 'thang'
 
-from Tkinter import * # Import tkinter
+from Tkinter import *
+import ExactCover
+
 
 puzzle_list = []
 puzzle_string_list = []
 solved_puzzle = ["417523698","253986147","986174325","691857432","532469871",
                  "748231569","379615284","865742913","124398756"]
 
+class DLX():
+    def __init__(self, puzzle):
+        self.rcn = []
+        self.puzzle = puzzle
+        self.num_of_constraints = 324
+        self.matrix = self.create_constraint_lists()
+        self.dlx = ExactCover.DancingLink(self.num_of_constraints,
+                                          self.matrix)
+
+    def create_constraint_lists(self):
+        rows = []
+        for r in range(0, 9):
+            for c in range(0, 9):
+                for n in range(0, 9):
+                    constraints = []
+                    row_col = (9 * r) + (c)
+                    row_num = 81 + (r * 9) + n
+                    col_num = (81 * 2) + (c * 9) + n
+                    box_num = (81 * 3) + (((c / 3) + ((r / 3) * 3)) * 9) + n
+                    constraints.append(row_col)
+                    constraints.append(row_num)
+                    constraints.append(col_num)
+                    constraints.append(box_num)
+                    rows.append(constraints)
+                    self.rcn.append((r, c, n+1))
+        return rows
+
+    def solve(self):
+        for r in range (0,9):
+            for c in range(0,9):
+                if self.puzzle[r][c] != '0':
+                    cell = int(self.puzzle[r][c])
+                    pos = (81*r) + (9*c) + (cell-1)
+                    row_col = (9*r) + c
+                    col = self.dlx.sm.headers[row_col+1].down
+                    while col != self.dlx.sm.headers[row_col+1]:
+                        if col.row == pos:
+                            self.dlx.cover(col)
+                        col = col.down
+
+        if self.dlx.search():
+            for i in self.dlx.solution:
+                r, c, n = self.rcn[i.row]
+                self.puzzle[r][c] = str(n)
+            return True
+        else:
+            return False
+
+    def get_puzzle(self):
+        return self.puzzle
+
+class SAT():
+    def __init__(self, puzzle):
+        self.puzzle = puzzle
+        self.clauses = self.create_clauses()
+        pass
+
+    def create_clauses(self):
+        pass
+
+    def solve(self):
+        pass
+
+    def get_puzzle(self):
+        return self.puzzle
+
+
+### Main UI for program
 class Sudoku_UI:
     #puzzle_list = []
     #puzzle_string_list = []
@@ -58,7 +128,8 @@ class Sudoku_UI:
                                  command=self.puzzle_print).pack(side=LEFT)
         self.clearButton = Button(self.myContainer3, text = "Clear",
                                   command=self.clear_screen).pack(side=LEFT)
-
+    dlx = []
+    sat = []
 ### Helper
     def write_gui(self):
         r = 0
@@ -83,20 +154,27 @@ class Sudoku_UI:
                 i += 1
 
             puzzle_string_list.append(''.join(cols))
+        self.dlx = DLX(puzzle_list)
+        self.sat = SAT(puzzle_list)
+        print puzzle_list
+        print self.dlx
+
+
 
 ### Solve puzzle with DLX algorithm
     def dlx_solve(self):
         print "solve with dlx code"
+        if self.dlx.solve():
+            global puzzle_list
+            puzzle_list = self.dlx.get_puzzle()
+            print (puzzle_list)
+            global solved_puzzle
+            solved_puzzle = self.dlx.get_puzzle()
+            self.write_gui()
+        else:
+            print "Sudoku not solvable"
         print self.rows
         self.write_gui()
-        # r = 0
-        # for col in self.rows:
-        #     c = 0
-        #     for e in col:
-        #         e.delete(0, END)
-        #         e.insert(0, solved_puzzle[r][c])
-        #         c += 1
-        #     r += 1
 
 ### Solve puzzle with SAT algorithm
     def sat_solve(self):
@@ -118,9 +196,13 @@ class Sudoku_UI:
     def puzzle_print(self):
         print(puzzle_list)
         print(puzzle_string_list)
+        print "This is the solved puzzle"
+        print(solved_puzzle)
 
 
+def mainUI():
+    root = Tk()
+    sudoku_gui = Sudoku_UI(root)
+    root.mainloop()
 
-root = Tk()
-sudoku_gui = Sudoku_UI(root)
-root.mainloop()
+#mainUI()
