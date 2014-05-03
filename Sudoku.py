@@ -1,7 +1,10 @@
 __author__ = 'don'
 import itertools
+import ExactCover
 
+#provide chain functions (takes list of lists and concatenates
 
+#
 def list_repeats(subset):
     return list(set([x for x in subset if subset.count(x) > 1]))
 
@@ -53,5 +56,8 @@ def check_matrix(self):
         print "block_repeats"
         print block_repeats
 
-
+# create a sparse matrix for the constraints of the sudoku puzzle
+# size is dependent on the size of puzzle
+def spit_sparse_matrix(self):
+    for rows in self.matrix
 

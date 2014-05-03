@@ -1,8 +1,7 @@
 __author__ = 'don'
 
-from Tkinter import Tk, RIGHT, BOTH, RAISED, W, E, StringVar
-from ttk import Frame, Button, Style, Entry
-
+from Tkinter import *
+from Tkinter.Ttk import *
 
 class Main(Frame):
     def __init__(self, parent):
