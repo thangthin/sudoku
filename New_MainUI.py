@@ -59,7 +59,7 @@ class Sudoku_UI:
         self.clearButton = Button(self.myContainer3, text = "Clear",
                                   command=self.clear_screen).pack(side=LEFT)
 
-### Parse to convert it to required list type
+### Helper
     def write_gui(self):
         r = 0
         for col in self.rows:
@@ -69,7 +69,7 @@ class Sudoku_UI:
                 e.insert(0, solved_puzzle[r][c])
                 c += 1
             r += 1
-
+### Parse to convert it to required list type
     def submit(self):
         for row in self.rows:
             cols = []
@@ -84,6 +84,7 @@ class Sudoku_UI:
 
             puzzle_string_list.append(''.join(cols))
 
+### Solve puzzle with DLX algorithm
     def dlx_solve(self):
         print "solve with dlx code"
         print self.rows
@@ -97,7 +98,7 @@ class Sudoku_UI:
         #         c += 1
         #     r += 1
 
-
+### Solve puzzle with SAT algorithm
     def sat_solve(self):
         print "solve with sat code"
         self.write_gui()
@@ -105,10 +106,7 @@ class Sudoku_UI:
     def quit_game(self):
         self.myParent.destroy()
 
-    def puzzle_print(self):
-        print(puzzle_list)
-        print(puzzle_string_list)
-
+### Clear the gui screen
     def clear_screen(self):
         for col in self.rows:
             for e in col:
@@ -116,6 +114,10 @@ class Sudoku_UI:
         del puzzle_list[:]
         del puzzle_string_list[:]
 
+### Temporary helper to print list to console
+    def puzzle_print(self):
+        print(puzzle_list)
+        print(puzzle_string_list)
 
 
 
