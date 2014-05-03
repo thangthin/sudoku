@@ -4,13 +4,12 @@ class Node():
         self.left, self.right = self, self
         self.row, self.col = row, col
         self.header = header
-        self.data = None
 
-    def cover(self):
+    def cover_node(self):
         self.up.down = self.down
         self.down.up = self.up
 
-    def uncover(self):
+    def uncover_node(self):
         self.up.down = self
         self.down.up = self
 
@@ -21,11 +20,11 @@ class Header():
         self.row = -1
         self.col = col
 
-    def cover(self):
+    def cover_header(self):
         self.left.right = self.right
         self.right.left = self.left
 
-    def uncover(self):
+    def uncover_header(self):
         self.left.right = self
         self.right.left = self
 
@@ -36,6 +35,7 @@ class Matrix():
         self.headers = []
         self.root = Header(-1)
         self.headers.append(self.root)
+        self.node_count = 0
         self.create_matrix()
 
     def create_headers(self):
@@ -46,12 +46,12 @@ class Matrix():
             self.headers[c].right = h
             self.root.left = h
             self.headers.append(h)
+            self.node_count += 1
 
     def create_row(self, n, cons):
         links = []
         for i in cons:
-            node = Node(n, i, self.headers[i])
-            node.data = cons
+            node = Node(n, i, self.headers[i+1])
             node.up = node.header.up
             node.down = node.header
             node.header.up.down = node
@@ -61,6 +61,7 @@ class Matrix():
             node.right = links[0]
             links[0].left.right = node
             links[0].left = node
+            self.node_count += 1
 
     def create_matrix(self):
         self.create_headers()
@@ -86,17 +87,18 @@ class DancingLink():
     def __init__(self, n, s):
         self.solution = []
         self.sm = Matrix(n, s)
+        self.col = self.sm.root.right
 
     def cover(self, node):
         n = node
         while True:
             c = n.left.header
-            c.cover()
+            c.cover_header()
             i = c.down
             while i != c:
                 j = i.right
                 while j != i:
-                    j.cover()
+                    j.cover_node()
                     j = j.right
                 i = i.down
             n = n.right
@@ -111,16 +113,17 @@ class DancingLink():
             while i != c:
                 j = i.left
                 while j != i:
-                    j.uncover()
+                    j.uncover_node()
                     j = j.left
                 i = i.up
-            c.uncover()
+            c.uncover_header()
             n = n.left
             if n == node:
                 break
 
     def search(self):
-        col = self.sm.root.right
+        self.col = self.sm.root.right
+        col = self.col
 
         if col == self.sm.root:
             return True
@@ -138,21 +141,15 @@ class DancingLink():
 
         return False
 
-    def main(self):
-        self.search()
-        for i in self.solution:
-            s = i.row, i.data
-            print s
 
-
-subset = [[1, 4, 7],
-          [1, 4],
-          [4, 5, 7],
-          [3, 5, 6],
-          [2, 3, 6, 7],
-          [2, 7]]
-
-DancingLink(7, subset).main()
+# subset = [[1, 4, 7],
+#           [1, 4],
+#           [4, 5, 7],
+#           [3, 5, 6],
+#           [2, 3, 6, 7],
+#           [2, 7]]
+#
+# DancingLink(7, subset).sm.print_matrix()
 
 
 
