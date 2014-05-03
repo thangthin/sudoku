@@ -4,6 +4,8 @@ from Tkinter import * # Import tkinter
 
 puzzle_list = []
 puzzle_string_list = []
+solved_puzzle = ["417523698","253986147","986174325","691857432","532469871",
+                 "748231569","379615284","865742913","124398756"]
 
 class Sudoku_UI:
     #puzzle_list = []
@@ -43,16 +45,31 @@ class Sudoku_UI:
         self.submitButton = Button(self.myContainer3, text = "Submit",
                                   command=self.submit).pack(side=LEFT)
 
-        self.newPuzzleButton = Button(self.myContainer3, text = "New Puzzle",
-                                      command=self.new_puzzle).pack(side=LEFT)
+        self.dlxButton = Button(self.myContainer3, text = "DLX",
+                                      command=self.dlx_solve).pack(side=LEFT)
+
+        self.satButton = Button(self.myContainer3, text = "SAT",
+                                      command=self.sat_solve).pack(side=LEFT)
 
         self.quitButton = Button(self.myContainer3, text = "Quit Program",
                                  command=self.quit_game).pack(side=LEFT)
 
         self.testButton = Button(self.myContainer3, text = "test",
                                  command=self.puzzle_print).pack(side=LEFT)
+        self.clearButton = Button(self.myContainer3, text = "Clear",
+                                  command=self.clear_screen).pack(side=LEFT)
 
 ### Parse to convert it to required list type
+    def write_gui(self):
+        r = 0
+        for col in self.rows:
+            c = 0
+            for e in col:
+                e.delete(0, END)
+                e.insert(0, solved_puzzle[r][c])
+                c += 1
+            r += 1
+
     def submit(self):
         for row in self.rows:
             cols = []
@@ -67,9 +84,23 @@ class Sudoku_UI:
 
             puzzle_string_list.append(''.join(cols))
 
+    def dlx_solve(self):
+        print "solve with dlx code"
+        print self.rows
+        self.write_gui()
+        # r = 0
+        # for col in self.rows:
+        #     c = 0
+        #     for e in col:
+        #         e.delete(0, END)
+        #         e.insert(0, solved_puzzle[r][c])
+        #         c += 1
+        #     r += 1
 
-    def new_puzzle(self):
-        print "new game code"
+
+    def sat_solve(self):
+        print "solve with sat code"
+        self.write_gui()
 
     def quit_game(self):
         self.myParent.destroy()
@@ -77,6 +108,13 @@ class Sudoku_UI:
     def puzzle_print(self):
         print(puzzle_list)
         print(puzzle_string_list)
+
+    def clear_screen(self):
+        for col in self.rows:
+            for e in col:
+                e.delete(0, END)
+        del puzzle_list[:]
+        del puzzle_string_list[:]
 
 
 
