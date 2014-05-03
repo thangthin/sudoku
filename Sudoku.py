@@ -18,14 +18,14 @@ def list_invalids(subset):
 
 
 def column(self, i):
-    return [row[i] for row in self.matrix]
+    return [row[i] for row in self.puzzle]
 
 
 def block(self, i):
     sub_row = (i%self.size)*self.size
     sub_col = (i/self.size)*self.size
     return ''.join([row[sub_row:sub_row+self.size] for row in
-           self.matrix[sub_col:sub_col+3]])
+           self.puzzle[sub_col:sub_col+3]])
 
 
 def check_matrix(self):
@@ -34,30 +34,36 @@ def check_matrix(self):
     block_repeats = []
     row_invalids = []
 
-    for i in range(len(self.matrix)):
-        row_invalids.append(list_invalids(self.matrix[i]))
-        row_repeats.append(list_repeats(self.matrix[i]))
+    for i in range(len(self.puzzle)):
+        row_invalids.append(list_invalids(self.puzzle[i]))
+        row_repeats.append(list_repeats(self.puzzle[i]))
         col_repeats.append(list_repeats(column(self, i)))
         block_repeats.append(list_repeats(block(self, i)))
 
     if len(list(itertools.chain(*row_invalids))) > 0:
         print "invalids: "
         print row_invalids
+        return False
 
     if len(list(itertools.chain(*row_repeats))) > 0:
         print "row_repeats: "
         print row_repeats
+        return False
 
     if len(list(itertools.chain(*col_repeats))) > 0:
         print "col_repeats: "
         print col_repeats
+        return False
 
     if len(list(itertools.chain(*block_repeats))) > 0:
         print "block_repeats"
         print block_repeats
+        return False
+
+    return True
+
 
 # create a sparse matrix for the constraints of the sudoku puzzle
 # size is dependent on the size of puzzle
-def spit_sparse_matrix(self):
-    for rows in self.matrix
+
 
