@@ -2,12 +2,12 @@ __author__ = 'thang'
 
 from Tkinter import *
 import ExactCover
+import time
 
 
 puzzle_list = []
 puzzle_string_list = []
-solved_puzzle = ["417523698","253986147","986174325","691857432","532469871",
-                 "748231569","379615284","865742913","124398756"]
+solved_puzzle = []
 
 class DLX():
     def __init__(self, puzzle):
@@ -78,15 +78,16 @@ class SAT():
 
 ### Main UI for program
 class Sudoku_UI:
-    #puzzle_list = []
-    #puzzle_string_list = []
-
+    dlx = []
+    sat = []
     def __init__(self,parent):
         self.myParent = parent
         self.myContainer1 = Frame(parent)
         self.myParent.title("Sudoku Solver GUI")
         self.myContainer1.pack()
+### TIMER WIDGET
 
+### PUZZLE DISPLAY
         self.myContainer2 = Frame(self.myContainer1)
         self.myContainer2.pack()
         self.rows = []
@@ -108,28 +109,32 @@ class Sudoku_UI:
                 e.grid(row=i, column = j, sticky = NSEW)
                 cols.append(e)
             self.rows.append(cols)
-
+### BUTTONS
         self.myContainer3 = Frame(self.myContainer1)
         self.myContainer3.pack()
-
         self.submitButton = Button(self.myContainer3, text = "Submit",
                                   command=self.submit).pack(side=LEFT)
-
         self.dlxButton = Button(self.myContainer3, text = "DLX",
                                       command=self.dlx_solve).pack(side=LEFT)
-
         self.satButton = Button(self.myContainer3, text = "SAT",
                                       command=self.sat_solve).pack(side=LEFT)
-
         self.quitButton = Button(self.myContainer3, text = "Quit Program",
                                  command=self.quit_game).pack(side=LEFT)
-
-        self.testButton = Button(self.myContainer3, text = "test",
-                                 command=self.puzzle_print).pack(side=LEFT)
+        # self.testButton = Button(self.myContainer3, text = "test",
+        #                          command=self.puzzle_print).pack(side=LEFT)
         self.clearButton = Button(self.myContainer3, text = "Clear",
                                   command=self.clear_screen).pack(side=LEFT)
-    dlx = []
-    sat = []
+
+### Time
+    def start_build_timer(self):
+        self.start_build = time.time()
+
+    def stop_build_timer(self):
+        self.stop_build = time.time()
+
+
+
+
 ### Helper
     def write_gui(self):
         r = 0
@@ -163,11 +168,16 @@ class Sudoku_UI:
 
 ### Solve puzzle with DLX algorithm
     def dlx_solve(self):
+        self.start_build_timer()
         print "solve with dlx code"
         if self.dlx.solve():
+            self.stop_build_timer()
+           # self.timeDisplay.delete(0, END)
+           # self.timeDisplay.insert(0, str(self.start_build - self.stop_build))
+            t = str(self.stop_build - self.start_build)
+            print "Time it took to solve puzzle " + t
             global puzzle_list
             puzzle_list = self.dlx.get_puzzle()
-            print (puzzle_list)
             global solved_puzzle
             solved_puzzle = self.dlx.get_puzzle()
             self.write_gui()
@@ -205,4 +215,4 @@ def mainUI():
     sudoku_gui = Sudoku_UI(root)
     root.mainloop()
 
-#mainUI()
+mainUI()
